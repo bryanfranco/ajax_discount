@@ -6,23 +6,58 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Discount Codes</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
         <script>
+            alert("1");
             $(document).ready(
+                    alert("1");
                     function(){
-                        $(action).click(doRequest);
+                        alert("2");
+                        showAllCodes();
                     }
-                );
-            function doRequest()
+            );
+     
+            function showAllCodes(){
+                alert("dab")
+                $.ajax({
+                    url:"listeCodesServlet",
+                    dataType: "json",
+                    error: showError,
+                    success: function(result){
+                        var template = $('codesTemp').html();
+                        var procTemplate = Mustache.to_html(template,resultat);
+                        $('#codes').html(procTemplate);
+                        $('body').append("<h1>Dab</h1>")
+                    }
+                });
+                
+            
+            }
+            
+            
+            function showError(xhr, status, message) {
+                alert(JSON.parse(xhr.responseText).message);
+                $('body').append('<h1>AH</h1>')
+            }
         
         </script>
     </head>
     <body>
-        <form>
-            <input type ="submit" name="action" >
-        </form>
+        <h1>Bonjour</h1>
+        <div id='codes'></div>
+        <script id="codesTemp" type="text/template">
+            <TABLE>
+            <tr><th>Code</th><th>Taux</th></tr>
+            {{! Pour chaque enregistrement }}
+            {{#codes}}
+                {{! Une ligne dans la table }}
+                <TR><TD>{{discountCode}}</TD><TD>{{rate}}</TD></TR>
+            {{/codes}}
+            </TABLE>
+        </script>
     </body>
 </html>
